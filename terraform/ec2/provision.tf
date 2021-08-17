@@ -1,5 +1,7 @@
 module "vpc" {
     source            = "../.vpc"
+    project_name        = "Test EC2"
+
 }
 
 module "ec2" {
