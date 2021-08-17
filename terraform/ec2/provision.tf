@@ -1,6 +1,6 @@
 module "vpc" {
     source            = "../.vpc"
-    project_name        = "Test EC2"
+    project_name      = "Test EC2"
 
 }
 
