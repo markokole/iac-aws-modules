@@ -1,3 +1,7 @@
+output project_name {
+    value = var.project_name
+}
+
 output security_group {
   value = aws_security_group.sg.id
 }
