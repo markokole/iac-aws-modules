@@ -1,9 +1,9 @@
 module "vpc" {
-    source            = "../vpc"
+    source            = "../.vpc"
 }
 
 module "ec2" {
-    source                      = "../ec2"
+    source                      = "../.ec2"
     security_groups             = [module.vpc.security_group]
     subnet_private              = module.vpc.subnet_private
     subnet_public               = module.vpc.subnet_public

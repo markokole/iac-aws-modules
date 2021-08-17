@@ -43,12 +43,12 @@ Terraform commands such as *init*, *plan*, *apply* and *destroy* are used once i
 
 Module directories available:
 
-- provision-vpc
-- provision-ec2
+- vpc
+- ec2
 
 ### VPC
 
-Enter directory $HOME/provision-vpc.
+Enter directory $HOME/vpc.
 
 Provisioning from this folder creates a VPC with basic resources in it.
 
@@ -56,8 +56,8 @@ Provisioning from this folder creates a VPC with basic resources in it.
 
 ### EC2
 
-Enter directory $HOME/provision-ec2.
+Enter directory $HOME/ec2.
 
-Provisioning from this folder executes VPC module (located in provision-vpc) and EC2 module. The following infrastructure is build:
+Provisioning from this folder executes VPC module (located in vpc) and EC2 module. The following infrastructure is built:
 
 ![alt text](diagrams/aws-ec2.png "VPC infrastructure with EC2 instances")
