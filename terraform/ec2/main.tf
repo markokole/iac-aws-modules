@@ -7,7 +7,7 @@ resource "aws_instance" "ec2" {
     key_name                    = var.key_name
     associate_public_ip_address = var.associate_public_ip_address
     tags = {
-        "Name" = var.project_name
+        "Name" = var.ec2_tag_name
     }
 }
 

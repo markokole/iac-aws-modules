@@ -14,6 +14,7 @@ module "ec2" {
     availability_zone           = module.vpc.availability_zone_public
     key_name                    = "markokey"
     associate_public_ip_address = true
+    ec2_tag_name                = "${module.vpc.project_name} - public ec2"
 }
 
 output "module_ec2_outputs" {

@@ -27,3 +27,7 @@ variable key_name {
 variable associate_public_ip_address {
     type = bool
 }
+
+variable ec2_tag_name {
+    type = string
+}
