@@ -1,19 +1,21 @@
 resource "aws_instance" "ec2" {
-    ami                         = var.ami
-    instance_type               = var.instance_type
-    subnet_id                   = var.subnet
-    vpc_security_group_ids      = var.security_groups
-    availability_zone           = var.availability_zone
-    key_name                    = var.key_name
-    associate_public_ip_address = var.associate_public_ip_address
+    for_each = var.ec2_data
+    ami                         = each.value.ami
+    instance_type               = each.value.instance_type
+    subnet_id                   = each.value.subnet_id
+    vpc_security_group_ids      = each.value.security_groups
+    availability_zone           = each.value.availability_zone
+    key_name                    = each.value.key_name
+    associate_public_ip_address = each.value.associate_public_ip_address
     tags = {
-        "Name" = var.ec2_tag_name
+        "Name" = "${var.project_name} - ${each.key}"
     }
 }
 
-output ec2_public_ip {
-   value = length(aws_instance.ec2) > 0 ? aws_instance.ec2.public_ip : ""
-}
+# output ec2_public_ip {
+#     for_each = aws_instance.ec2
+#     value = length(aws_instance.ec2) > 0 ? each.public_ip : ""
+# }
 
 # resource "aws_instance" "private" {
 #     count                       = 0
