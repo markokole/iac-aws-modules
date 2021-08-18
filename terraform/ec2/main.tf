@@ -1,11 +1,11 @@
 resource "aws_instance" "ec2" {
-    ami                         = "ami-0baa9e2e64f3c00db"  # Red Hat Enterprise Linux 8 (HVM), SSD Volume Type
-    instance_type               = "t3.medium"
+    ami                         = var.ami
+    instance_type               = var.instance_type
     subnet_id                   = var.subnet
     vpc_security_group_ids      = var.security_groups
     availability_zone           = var.availability_zone
-    key_name                    = "markokey"
-    associate_public_ip_address = "true"
+    key_name                    = var.key_name
+    associate_public_ip_address = var.associate_public_ip_address
     tags = {
         "Name" = var.project_name
     }
