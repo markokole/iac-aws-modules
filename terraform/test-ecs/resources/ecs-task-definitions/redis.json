@@ -1,0 +1,16 @@
+[
+    {
+        "name": "redis-app",
+        "image": "redis:latest",
+        "cpu": 512,
+        "memory": 2048,
+        "portMappings": [
+            {
+                "containerPort": 6379,
+                "hostPort": 6379,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true
+    }
+]
