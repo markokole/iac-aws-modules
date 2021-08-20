@@ -8,10 +8,14 @@ data "aws_availability_zones" "available" {
 }
 
 # Write machine's IP address to a file
-resource null_resource "obtain_my_ip" {
-    provisioner "local-exec" {
-        command = "curl checkip.amazonaws.com > my_ip.txt"
-    }
+# resource null_resource "obtain_my_ip" {
+#     provisioner "local-exec" {
+#         command = "curl checkip.amazonaws.com > my_ip.txt"
+#     }
+# }
+module myip {
+  source  = "4ops/myip/http"
+  version = "1.0.0"
 }
 
 # Create the VPC
@@ -178,15 +182,13 @@ resource "aws_security_group" "sg" {
         to_port     = 22
         protocol    = "tcp"
         self        = "false"
-        cidr_blocks = [fileexists("my_ip.txt") ? "${chomp(file("my_ip.txt"))}/32" : "127.0.0.0/32"]
+        cidr_blocks = ["${module.myip.address}/32"] # [fileexists("my_ip.txt") ? "${chomp(file("my_ip.txt"))}/32" : "127.0.0.0/32"]
         description = "Port 22 to local machine"
     }
 
     # lifecycle {
     #     ignore_changes = [ingress]
     # }
-
-  depends_on = [null_resource.obtain_my_ip]
 }
 
 # resource null_resource "delete_my_ip_file" {

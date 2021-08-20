@@ -49,7 +49,7 @@ resource "aws_ecs_service" "service" {
     network_configuration {
         assign_public_ip  = each.value.assign_public_ip
         security_groups   = var.security_groups
-        subnets           = [each.value.subnet_id]
+        subnets           = [each.value.assign_public_ip == true ? var.subnet_id_public : var.subnet_id_private]
     }
     lifecycle {
         ignore_changes = [task_definition]

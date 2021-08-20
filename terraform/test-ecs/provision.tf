@@ -30,7 +30,7 @@ module "ecs" {
             memory                  = 2048
             container_definitions   = "resources/ecs-task-definitions/nginx.json"
             # service
-            subnet_id               = module.vpc.subnet_public
+            #subnet_id               = module.vpc.subnet_public
             assign_public_ip        = true
         },
         redis = {
@@ -39,12 +39,15 @@ module "ecs" {
             memory                  = 2048
             container_definitions   = "resources/ecs-task-definitions/redis.json"
             # service
-            subnet_id               = module.vpc.subnet_private
+            # subnet_id               = module.vpc.subnet_private
             assign_public_ip        = false
         }
     }
 
     security_groups     = [module.vpc.security_group]
+    subnet_id_private   = module.vpc.subnet_private
+    subnet_id_public    = module.vpc.subnet_private
+
 
     security_group_rules = {
         redis = {
@@ -55,4 +58,6 @@ module "ecs" {
     }
 }
 
-
+output cloudmap_services {
+    value = formatlist("%s.${keys(module.ecs)[0]}", module.ecs["ecs_services"])
+}

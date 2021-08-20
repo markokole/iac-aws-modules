@@ -15,6 +15,14 @@ variable security_groups {
     type = list(string)
 }
 
+variable subnet_id_private {
+    type = string
+}
+
+variable subnet_id_public {
+    type = string
+}
+
 variable security_group_rules {
     description = "Security group rules added for ECS containers"
     type = map
