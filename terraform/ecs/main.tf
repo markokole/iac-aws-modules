@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "ping" {
-    name = var.ecs_cluster_name
+    name = replace(var.ecs_cluster_name, " ", "-")
 
     setting {
         name  = "containerInsights"
@@ -40,6 +40,11 @@ resource "aws_ecs_service" "service" {
     desired_count     = 1
     launch_type       = "FARGATE"
     platform_version  = "LATEST"
+
+    service_registries {
+        registry_arn    = aws_service_discovery_service.services[each.key].arn
+        container_name  = "${each.key}-app"
+  }
 
     network_configuration {
         assign_public_ip  = each.value.assign_public_ip
