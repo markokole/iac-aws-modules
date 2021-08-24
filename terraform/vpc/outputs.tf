@@ -11,7 +11,7 @@ output security_group {
 }
 
 output subnet_private {
-    value = aws_subnet.private.id
+    value = [for subnet in aws_subnet.private : subnet.id]
 }
 
 output subnet_public {
@@ -19,7 +19,7 @@ output subnet_public {
 }
 
 output availability_zone_private {
-    value = aws_subnet.private.availability_zone
+    value = [for subnet in aws_subnet.private : subnet.availability_zone]
 }
 
 output availability_zone_public {

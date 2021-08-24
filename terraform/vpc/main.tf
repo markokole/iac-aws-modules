@@ -7,12 +7,6 @@ data "aws_availability_zones" "available" {
     state = "available"
 }
 
-# Write machine's IP address to a file
-# resource null_resource "obtain_my_ip" {
-#     provisioner "local-exec" {
-#         command = "curl checkip.amazonaws.com > my_ip.txt"
-#     }
-# }
 module myip {
   source  = "4ops/myip/http"
   version = "1.0.0"
@@ -20,7 +14,7 @@ module myip {
 
 # Create the VPC
 resource "aws_vpc" "vpc" {
-    cidr_block           = "10.0.0.0/23"
+    cidr_block           = var.vpc_cidr_block
     enable_dns_hostnames = true
 
     tags = {
@@ -29,25 +23,26 @@ resource "aws_vpc" "vpc" {
     }
 }
 
-# Create private subnet
-resource "aws_subnet" "private" {
-    vpc_id              = aws_vpc.vpc.id
-    cidr_block          = "10.0.0.0/24"
-    availability_zone   = data.aws_availability_zones.available.names[0]
-
-    tags = {
-        Name = "Private"
-    }
-}
-
 # Create public subnet
 resource "aws_subnet" "public" {
     vpc_id              = aws_vpc.vpc.id
-    cidr_block          = "10.0.1.0/24"
+    cidr_block          = local.cidr_blocks[0]
     availability_zone   = data.aws_availability_zones.available.names[1]
 
     tags = {
-        Name = "Public"
+        Name = "Public subnet"
+    }
+}
+
+# Create private subnets
+resource "aws_subnet" "private" {
+    for_each = toset(slice(local.cidr_blocks, 1, var.no_private_subnets + 1))
+    vpc_id              = aws_vpc.vpc.id
+    cidr_block          = each.key
+    availability_zone   = data.aws_availability_zones.available.names[index(slice(local.cidr_blocks, 1, var.no_private_subnets + 1), each.key)]
+
+    tags = {
+        Name = "Private subnet ${index(slice(local.cidr_blocks, 1, var.no_private_subnets + 1), each.key)}"
     }
 }
 
@@ -144,7 +139,8 @@ resource "aws_route_table" "nat_gateway" {
 
 # Associate the nat gateway route table with the private subnet
 resource "aws_route_table_association" "subnet_private_nat_gateway" {
-    subnet_id =  aws_subnet.private.id
+    for_each = aws_subnet.private
+    subnet_id =  each.value.id # aws_subnet.private.*.id
     route_table_id = aws_route_table.nat_gateway.id
 }
 
@@ -190,11 +186,3 @@ resource "aws_security_group" "sg" {
     #     ignore_changes = [ingress]
     # }
 }
-
-# resource null_resource "delete_my_ip_file" {
-#   provisioner "local-exec" {
-#     command = "rm my_ip.txt"
-#   }
-
-#   depends_on = [aws_security_group.sg]
-# }
