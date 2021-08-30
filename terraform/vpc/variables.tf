@@ -6,6 +6,11 @@ variable project_name {
 variable no_private_subnets {
     default = 1
     type = number
+
+    validation {
+        condition     = var.no_private_subnets == 1 || var.no_private_subnets == 2
+        error_message = "Number of private ids can be either 1 or 2."
+    }
 }
 
 variable vpc_cidr_block {

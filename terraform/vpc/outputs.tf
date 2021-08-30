@@ -25,3 +25,7 @@ output availability_zone_private {
 output availability_zone_public {
     value = aws_subnet.public.availability_zone
 }
+
+output my_ip {
+    value = module.myip.address
+}
