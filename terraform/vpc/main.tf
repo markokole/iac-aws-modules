@@ -140,7 +140,7 @@ resource "aws_route_table" "nat_gateway" {
 # Associate the nat gateway route table with the private subnet
 resource "aws_route_table_association" "subnet_private_nat_gateway" {
     for_each = aws_subnet.private
-    subnet_id =  each.value.id # aws_subnet.private.*.id
+    subnet_id =  each.value.id
     route_table_id = aws_route_table.nat_gateway.id
 }
 
@@ -164,14 +164,14 @@ resource "aws_security_group" "sg" {
         description = ""
     }
 
-    ingress {
-        from_port   = 80
-        to_port     = 80
-        protocol    = "tcp"
-        self        = "false"
-        cidr_blocks = ["0.0.0.0/0"]
-        description = "Port 80 to the world"
-    }
+    # ingress {
+    #     from_port   = 80
+    #     to_port     = 80
+    #     protocol    = "tcp"
+    #     self        = "false"
+    #     cidr_blocks = ["0.0.0.0/0"]
+    #     description = "Port 80 to the world"
+    # }
 
     ingress {
         from_port   = 22

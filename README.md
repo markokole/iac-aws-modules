@@ -26,13 +26,13 @@ and fill out the values after the credentials for the AWS user are generated. Th
 The repository's folder *terraform* will map to the Docker's volume called *local-git*. Run the following command
 
 ```bash
-docker run -itd --name terraformer --env-file "aws/credentials" --volume $PWD/terraform:/local-git markokole/terraformer:1.0.3
+docker run -itd --name terraformer-aws --env-file "aws/credentials" --volume $PWD/terraform:/local-git markokole/terraformer:1.0.3
 ```
 
 This will start the container. Now step into the container with the following command:
 
 ```bash
-docker exec -it terraformer /bin/sh
+docker exec -it terraformer-aws /bin/sh
 ```
 
 ## Usage
