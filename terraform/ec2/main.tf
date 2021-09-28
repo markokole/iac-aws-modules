@@ -7,6 +7,7 @@ resource "aws_instance" "ec2" {
     availability_zone           = each.value.availability_zone
     key_name                    = each.value.key_name
     associate_public_ip_address = each.value.associate_public_ip_address
+    user_data                   = each.value.user_data
     tags = {
         "Name" = "${var.project_name} - ${each.key}"
     }
