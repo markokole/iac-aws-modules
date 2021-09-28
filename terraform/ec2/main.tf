@@ -43,6 +43,6 @@ resource "aws_security_group_rule" "add" {
 #     }
 # }
 
-# output private_ip {
-#    value = length(aws_instance.private) > 0 ? aws_instance.private[0].private_ip : ""
-# }
+output private_ips {
+   value = [for ec2 in aws_instance.ec2 : ec2.private_ip]
+}
