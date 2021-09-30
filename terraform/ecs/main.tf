@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "task_from_file" {
     }
 }
 
-resource "aws_security_group_rule" "redis" {
+resource "aws_security_group_rule" "add" {
     for_each = var.security_group_rules
     type              = "ingress"
     from_port         = each.value.port

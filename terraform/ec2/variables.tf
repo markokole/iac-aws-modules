@@ -10,6 +10,7 @@ variable ec2_data {
 variable security_group_to_add_rule {
   description = "Security Group which gets a new rule"
   type        = string
+  default     = ""
 }
 
 variable security_group_rules {
