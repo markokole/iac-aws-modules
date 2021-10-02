@@ -13,17 +13,6 @@ resource "aws_instance" "ec2" {
     }
 }
 
-resource "aws_security_group_rule" "add" {
-    for_each = var.security_group_rules
-    type              = "ingress"
-    from_port         = each.value.port
-    to_port           = each.value.port
-    protocol          = "tcp"
-    cidr_blocks       = each.value.cidr_blocks
-    security_group_id = var.security_group_to_add_rule
-    description       = each.value.description
-}
-
 # output ec2_public_ip {
 #     for_each = aws_instance.ec2
 #     value = length(aws_instance.ec2) > 0 ? each.public_ip : ""

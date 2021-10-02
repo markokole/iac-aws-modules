@@ -6,10 +6,6 @@ output vpc_id {
     value = aws_vpc.vpc.id
 }
 
-output security_group {
-  value = aws_security_group.sg.id
-}
-
 output subnet_private {
     value = [for subnet in aws_subnet.private : subnet.id]
 }
@@ -24,8 +20,4 @@ output availability_zone_private {
 
 output availability_zone_public {
     value = aws_subnet.public.availability_zone
-}
-
-output my_ip {
-    value = module.myip.address
 }

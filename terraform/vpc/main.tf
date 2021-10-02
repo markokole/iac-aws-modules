@@ -7,11 +7,6 @@ data "aws_availability_zones" "available" {
     state = "available"
 }
 
-module myip {
-  source  = "4ops/myip/http"
-  version = "1.0.0"
-}
-
 # Create the VPC
 resource "aws_vpc" "vpc" {
     cidr_block           = var.vpc_cidr_block
@@ -142,47 +137,4 @@ resource "aws_route_table_association" "subnet_private_nat_gateway" {
     for_each = aws_subnet.private
     subnet_id =  each.value.id
     route_table_id = aws_route_table.nat_gateway.id
-}
-
-# Create security group and open port 80 to the world and SSH to the local machine
-resource "aws_security_group" "sg" {
-    name        = "basics"
-    vpc_id      = aws_vpc.vpc.id
-
-    egress {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        protocol  = -1
-        self      = true
-        from_port = 0
-        to_port   = 0
-        description = ""
-    }
-
-    # ingress {
-    #     from_port   = 80
-    #     to_port     = 80
-    #     protocol    = "tcp"
-    #     self        = "false"
-    #     cidr_blocks = ["0.0.0.0/0"]
-    #     description = "Port 80 to the world"
-    # }
-
-    ingress {
-        from_port   = 22
-        to_port     = 22
-        protocol    = "tcp"
-        self        = "false"
-        cidr_blocks = ["${module.myip.address}/32"] # [fileexists("my_ip.txt") ? "${chomp(file("my_ip.txt"))}/32" : "127.0.0.0/32"]
-        description = "Port 22 to local machine"
-    }
-
-    # lifecycle {
-    #     ignore_changes = [ingress]
-    # }
 }
