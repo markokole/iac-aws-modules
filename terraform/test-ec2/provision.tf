@@ -3,6 +3,11 @@ module "vpc" {
     project_name      = "Test EC2"
 }
 
+module myip {
+  source  = "4ops/myip/http"
+  version = "1.0.0"
+}
+
 module sg {
     source              = "../sg"
     vpc_id              = module.vpc.vpc_id
@@ -47,11 +52,6 @@ yum install wget -y
 # source ~/.bashrc
 # /home/ec2-user/spark-3.1.2-bin-hadoop3.2/bin/run-example SparkPi 10 > /home/ec2-user/sparkpi.out
 EOF
-}
-
-module myip {
-  source  = "4ops/myip/http"
-  version = "1.0.0"
 }
 
 module "ec2" {

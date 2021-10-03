@@ -11,6 +11,15 @@
                 "protocol": "tcp"
             }
         ],
-        "essential": true
+        "essential": true,
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+              "awslogs-group": "nginx",
+              "awslogs-region": "eu-north-1",
+              "awslogs-stream-prefix": "ecs",
+              "awslogs-create-group": "true"
+            }
+        }
     }
 ]
