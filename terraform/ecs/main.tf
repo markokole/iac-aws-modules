@@ -1,10 +1,5 @@
 resource "aws_ecs_cluster" "ecs" {
     name = replace(var.ecs_cluster_name, " ", "-")
-
-    setting {
-        name  = "containerInsights"
-        value = "enabled"
-    }
 }
 
 data "aws_iam_role" "ecs_task_execution_role" {
@@ -14,8 +9,8 @@ data "aws_iam_role" "ecs_task_execution_role" {
 resource aws_ecs_task_definition task_from_file {
     for_each = var.ecs_configuration
     family                      = each.key
-    network_mode                = "awsvpc"
-    requires_compatibilities    = ["FARGATE", "EC2"]
+    network_mode                = each.value.launch_type == "FARGATE" ? "awsvpc" : "bridge"
+    requires_compatibilities    = [each.value.launch_type]
     cpu                         = each.value.cpu
     memory                      = each.value.memory
     container_definitions       = file(each.value.container_definitions)
@@ -32,19 +27,31 @@ resource "aws_ecs_service" "service" {
     cluster           = aws_ecs_cluster.ecs.id
     task_definition   = aws_ecs_task_definition.task_from_file[each.key].id
     desired_count     = 1
-    launch_type       = "FARGATE"
-    platform_version  = "LATEST" # "1.43.0"
+    launch_type       = each.value.launch_type
+    platform_version  = each.value.launch_type == "FARGATE" ? "LATEST" : null
 
-    service_registries {
-        registry_arn    = aws_service_discovery_service.services[each.key].arn
-        container_name  = "${each.key}-app"
-  }
-
-    network_configuration {
-        assign_public_ip  = each.value.assign_public_ip
-        security_groups   = var.security_groups
-        subnets           = [each.value.assign_public_ip == true ? var.subnet_id_public : var.subnet_id_private]
+    # only for FARGATE launch type,
+    # launch type EC2 has its service registered in the cloudmap directly
+    dynamic service_registries {
+        for_each = each.value.launch_type == "FARGATE" ? [1] : []
+        content { 
+            registry_arn    = aws_service_discovery_service.fargate[each.key].arn
+            container_name  = "${each.key}-app"
+        }
     }
+
+    # block network_configuration is only used for network mode awsvpc (launch type FARGATE)
+    # so it is ignored when launch type EC2, with network mode bridge, is in use
+    dynamic network_configuration {
+        for_each = each.value.launch_type == "FARGATE" ? [1] : []
+        content { 
+            assign_public_ip  = each.value.assign_public_ip
+            security_groups   = var.security_groups
+            subnets           = [var.subnet_id_public]
+
+        }
+    }
+
     lifecycle {
         ignore_changes = [task_definition]
     }

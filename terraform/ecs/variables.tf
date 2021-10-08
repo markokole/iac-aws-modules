@@ -34,3 +34,7 @@ variable security_group_rules {
         }
     }
 }
+
+variable ec2_private_ips {
+    type = list(string)
+}
