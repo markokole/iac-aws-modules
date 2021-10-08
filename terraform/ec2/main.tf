@@ -8,6 +8,7 @@ resource "aws_instance" "ec2" {
     key_name                    = each.value.key_name
     associate_public_ip_address = each.value.associate_public_ip_address
     user_data                   = each.value.user_data
+    iam_instance_profile        = each.value.iam_instance_profile
     tags = {
         "Name" = "${var.project_name} - ${each.key}"
     }
@@ -31,7 +32,3 @@ resource "aws_instance" "ec2" {
 #         "Name" = "Private"
 #     }
 # }
-
-output private_ips {
-   value = [for ec2 in aws_instance.ec2 : ec2.private_ip]
-}
