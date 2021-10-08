@@ -58,3 +58,10 @@ resource "aws_service_discovery_instance" "instances" {
     
   }
 }
+
+output service_discovery_ecs {
+    value = concat(
+                [for f in aws_service_discovery_service.fargate : "${f.name}.${aws_service_discovery_private_dns_namespace.dns_namespace.name}"],
+                ["${aws_service_discovery_service.ec2.name}.${aws_service_discovery_private_dns_namespace.dns_namespace.name}"]
+            )
+}
