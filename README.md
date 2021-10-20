@@ -13,7 +13,7 @@ and the access key and the secret access key.
 
 ### Credentials file
 
-Prepare a credentials file with the following structure
+Create a folder *aws* and prepare a credentials file in the folder with the following key-value structure
 
 ```bash
 AWS_ACCESS_KEY_ID=
@@ -21,12 +21,14 @@ AWS_SECRET_ACCESS_KEY=
 AWS_DEFAULT_REGION=
 ```
 
-and fill out the values after the credentials for the AWS user are generated. The file, in this case, is in folder *aws*.
+### Create work environment
 
-The repository's folder *terraform* will map to the Docker's volume called *local-git*. Run the following command
+The repository's folder *terraform* will map to the Docker's volume called *local-git*. Change <CONTAINER_NAME> with meaningful name in the below command before executing it.
+
+Run the following command
 
 ```bash
-docker run -itd --name terraformer-aws --env-file "aws/credentials" --volume $PWD/terraform:/local-git markokole/terraformer:1.0.3
+docker run -itd --name <CONTAINER_NAME> --env-file "aws/credentials" --volume $PWD/terraform:/local-git markokole/terraformer:1.0.3
 ```
 
 This will start the container. Now step into the container with the following command:
@@ -43,8 +45,12 @@ Terraform commands such as *init*, *plan*, *apply* and *destroy* are used once i
 
 Module directories available:
 
-- vpc
-- ec2
+- vpc (Virtual Private Cloud)
+- sg (Security Groups)
+- ec2 (Elastic Compute Cloud)
+- ecs (Elastic Container Service)
+- redshift (Amazon's Datawarehouse)
+- rds (Relational Database Service)
 
 ### VPC
 
