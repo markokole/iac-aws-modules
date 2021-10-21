@@ -29,10 +29,15 @@ resource "aws_service_discovery_service" "fargate" {
 # Container services on EC2 need a different approach - EC2 server's internal IP and port number must be registered
 #
 locals {
-    ec2_service_name = element(keys({for key, c in var.ecs_configuration : key => c if c.launch_type == "EC2"}), 0)
+    
+    ec2_service_name_keys = keys({for key, c in var.ecs_configuration : key => c if c.launch_type == "EC2"})
+    number_ec2_services = length(local.ec2_service_name_keys)
+    ec2_service_name = length(local.ec2_service_name_keys) > 0 ? element(local.ec2_service_name_keys, 0) : "dummy"
+    
 }
 
 resource "aws_service_discovery_service" "ec2" {
+    count = local.ec2_service_name == "dummy" ? 0 : 1
     name       = "ecs-${local.ec2_service_name}"
 
     dns_config {
@@ -49,8 +54,9 @@ resource "aws_service_discovery_service" "ec2" {
 }
 
 resource "aws_service_discovery_instance" "instances" {
+  count = local.ec2_service_name == "dummy" ? 0 : 1
   instance_id = "id"
-  service_id  = aws_service_discovery_service.ec2.id
+  service_id  = aws_service_discovery_service.ec2[0].id
 
   attributes = {
     AWS_INSTANCE_IPV4 = element(var.ec2_private_ips, 0)
@@ -60,8 +66,8 @@ resource "aws_service_discovery_instance" "instances" {
 }
 
 output service_discovery_ecs {
-    value = concat(
+    value = local.ec2_service_name == "dummy" ? [] : concat(
                 [for f in aws_service_discovery_service.fargate : "${f.name}.${aws_service_discovery_private_dns_namespace.dns_namespace.name}"],
-                ["${aws_service_discovery_service.ec2.name}.${aws_service_discovery_private_dns_namespace.dns_namespace.name}"]
+                ["${aws_service_discovery_service.ec2[0].name}.${aws_service_discovery_private_dns_namespace.dns_namespace.name}"]
             )
 }
