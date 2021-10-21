@@ -38,3 +38,8 @@ variable security_group_rules {
 variable ec2_private_ips {
     type = list(string)
 }
+
+variable ports_on_ec2 {
+    description = "Ports used by the docker containers on the EC2 instance."
+    type = list(string)
+}
