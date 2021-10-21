@@ -1,10 +1,12 @@
-# AWS with Terraform
+# Terraform modules for provisioning AWS services
+
+Provisioning should not be done directly from this repository, although some folders (test-*) contain code for TEST provisioning. Rather use this repository as the source for Terraform modules in another repository.
 
 ## Access to AWS
 
 ### User
 
-You need an AWS user with full access to policies:
+You need an AWS user with full access (finetune access when going beyond testing) to policies:
 
 - AmazonVPCFullAccess
 - AmazonECS_FullAccess
@@ -41,29 +43,83 @@ docker exec -it terraformer-aws /bin/sh
 
 The home directory is *local-git* - it is advised to enter it right away.
 
-Terraform commands such as *init*, *plan*, *apply* and *destroy* are used once in the module directories.
+Terraform commands such as *init*, *plan*, *apply* and *destroy* can be used once in the module directories.
 
-Module directories available:
+## Modules
 
-- vpc (Virtual Private Cloud)
-- sg (Security Groups)
-- ec2 (Elastic Compute Cloud)
-- ecs (Elastic Container Service)
-- redshift (Amazon's Datawarehouse)
-- rds (Relational Database Service)
+### vpc
 
-### VPC
+Virtual Private Cloud
 
-Enter directory $HOME/vpc.
+Depending on module: None
 
-Provisioning from this folder creates a VPC with basic resources in it.
+Output values:
+
+- project_name
+- vpc_id
+- subnet_private
+- subnet_public
+- availability_zone_private
+- availability_zone_public
+
+### sg
+
+Security Groups
+
+Depending on module:
+
+- VPC
+
+Output values:
+
+- security_group_id
+
+### ec2
+
+Elastic Compute Cloud
+
+Depending on module:
+
+- VPC
+- SG
+
+Output values:
+
+- private_ips
+
+### ecs
+
+Elastic Container Service
+
+Output values:
+
+- ecs_services
+- cluster_name
+
+### redshift
+
+Amazon's Datawarehouse
+
+Output values: None
+
+### rds
+
+Relational Database Service
+
+Output values: None
+
+## VPC and SG
+
+Directories $HOME/vpc and $HOME/sg.
+
+These two modules provision a VPC and a security group. VPC id is a requirement for provisioning a security group.
 
 ![alt text](diagrams/aws-vpc.png "VPC infrastructure")
 
-### EC2
+## EC2
 
-Enter directory $HOME/ec2.
+Directory $HOME/ec2.
 
-Provisioning from this folder executes VPC module (located in vpc) and EC2 module. The following infrastructure is built:
+This module provisions one or more EC2 instances, requirement is VPC id and SG id.
 
 ![alt text](diagrams/aws-ec2.png "VPC infrastructure with EC2 instances")
