@@ -54,7 +54,7 @@ resource "aws_service_discovery_instance" "instances" {
 
   attributes = {
     AWS_INSTANCE_IPV4 = element(var.ec2_private_ips, 0)
-    AWS_INSTANCE_PORT = "80"
+    AWS_INSTANCE_PORT = element(var.ports_on_ec2, 0)
     
   }
 }
