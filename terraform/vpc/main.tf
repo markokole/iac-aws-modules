@@ -20,12 +20,13 @@ resource "aws_vpc" "vpc" {
 
 # Create public subnet
 resource "aws_subnet" "public" {
+    for_each = toset(slice(local.cidr_blocks, 1, var.no_public_subnets + 1))
     vpc_id              = aws_vpc.vpc.id
-    cidr_block          = local.cidr_blocks[0]
-    availability_zone   = data.aws_availability_zones.available.names[1]
+    cidr_block          = each.key
+    availability_zone   = data.aws_availability_zones.available.names[index(slice(local.cidr_blocks, 1, var.no_public_subnets + 1), each.key)]
 
     tags = {
-        Name = "Public subnet"
+        Name = "Public subnet ${index(slice(local.cidr_blocks, 1, var.no_public_subnets + 1), each.key)}"
     }
 }
 

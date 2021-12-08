@@ -13,6 +13,16 @@ variable no_private_subnets {
     }
 }
 
+variable no_public_subnets {
+    default = 1
+    type = number
+
+    validation {
+        condition     = var.no_public_subnets == 1 || var.no_public_subnets == 2
+        error_message = "Number of public ids can be either 1 or 2."
+    }
+}
+
 variable vpc_cidr_block {
     type = string
     default = "10.0.0.0/23"
