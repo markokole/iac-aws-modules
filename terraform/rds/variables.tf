@@ -10,6 +10,11 @@ variable password {
     type = string
 }
 
+variable publicly_accessible {
+    type = string
+}
+
+
 variable subnet_ids {
     type = list(string)
 }

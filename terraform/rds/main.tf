@@ -26,6 +26,7 @@ resource "aws_db_instance" "default" {
     name                 = "mydb"
     username             = var.username
     password             = var.password
+    publicly_accessible  = var.publicly_accessible
     parameter_group_name = "default.mysql5.7"
     skip_final_snapshot  = true
     vpc_security_group_ids = var.security_groups
