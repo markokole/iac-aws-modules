@@ -19,5 +19,5 @@ output availability_zone_private {
 }
 
 output availability_zone_public {
-    value = aws_subnet.public.availability_zone
+    value = [for subnet in aws_subnet.public : subnet.availability_zone]
 }
