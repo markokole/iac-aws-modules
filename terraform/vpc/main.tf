@@ -101,6 +101,10 @@ resource "aws_nat_gateway" "gateway" {
     subnet_id           = local.public_subnet_ids[count.index]
     connectivity_type   = "public"
 
+    tags = {
+        Name = "Project ${var.project_name} - Gateway ${count.index}"
+    }
+
     depends_on          = [aws_internet_gateway.igw]
 }
 
