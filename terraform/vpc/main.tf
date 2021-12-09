@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "eu-north-1"
+    region = "eu-west-1"
 }
 
 # Get all availability zones from the region
@@ -20,25 +20,25 @@ resource "aws_vpc" "vpc" {
 
 # Create public subnet
 resource "aws_subnet" "public" {
-    for_each = toset(slice(local.cidr_blocks, 1, var.no_public_subnets + 1))
+    count               = length(local.public_cidr_blocks)
     vpc_id              = aws_vpc.vpc.id
-    cidr_block          = each.key
-    availability_zone   = data.aws_availability_zones.available.names[index(slice(local.cidr_blocks, 1, var.no_public_subnets + 1), each.key)]
+    cidr_block          = local.public_cidr_blocks[count.index]
+    availability_zone   = local.availability_zone_names[count.index]
 
     tags = {
-        Name = "Public subnet ${index(slice(local.cidr_blocks, 1, var.no_public_subnets + 1), each.key)}"
+        Name = "Public subnet ${count.index}"
     }
 }
 
 # Create private subnets
 resource "aws_subnet" "private" {
-    for_each = toset(slice(local.cidr_blocks, 1, var.no_private_subnets + 1))
+    count               = length(local.private_cidr_blocks)
     vpc_id              = aws_vpc.vpc.id
-    cidr_block          = each.key
-    availability_zone   = data.aws_availability_zones.available.names[index(slice(local.cidr_blocks, 1, var.no_private_subnets + 1), each.key)]
+    cidr_block          = local.private_cidr_blocks[count.index]
+    availability_zone   = local.availability_zone_names[count.index]
 
     tags = {
-        Name = "Private subnet ${index(slice(local.cidr_blocks, 1, var.no_private_subnets + 1), each.key)}"
+        Name = "Private subnet ${count.index}"
     }
 }
 
@@ -47,7 +47,7 @@ resource "aws_internet_gateway" "igw" {
     vpc_id = aws_vpc.vpc.id
 
     tags = {
-        Name = "IGW for VPC basics"
+        Name = var.project_name
     }
 }
 
@@ -74,28 +74,31 @@ resource "aws_route_table" "internet_gateway" {
     ]
 
     tags = {
-        Name = "Internet Gateway"
+        Name = var.project_name
     }
 }
 
 # Associate the Internet Gateway route table with the public subnet
 resource "aws_route_table_association" "subnet_public" {
-    subnet_id       =  aws_subnet.public.id
+    count           = length(local.public_subnet_ids)
+    subnet_id       = local.public_subnet_ids[count.index]
     route_table_id  = aws_route_table.internet_gateway.id
 }
 
 # Create an Elastic IP
 resource "aws_eip" "ip" {
+    count = length(local.public_subnet_ids)
     tags = {
-        Name = "IP for NAT Gateway"
+        Name = "IP for NAT Gateway ${count.index}"
     }
 }
 
 # Create NAT gateway in public subnet to allow instances in private subnet to send traffic to the internet
 # but the internet cannot connect to the instances
 resource "aws_nat_gateway" "gateway" {
-    allocation_id       = aws_eip.ip.id
-    subnet_id           = aws_subnet.public.id
+    count               = length(aws_eip.ip)
+    allocation_id       = aws_eip.ip[count.index].allocation_id
+    subnet_id           = local.public_subnet_ids[count.index]
     connectivity_type   = "public"
 
     depends_on          = [aws_internet_gateway.igw]
@@ -103,12 +106,13 @@ resource "aws_nat_gateway" "gateway" {
 
 # Create route table where all internet bound traffic is sent to nat gateway
 resource "aws_route_table" "nat_gateway" {
-    vpc_id = aws_vpc.vpc.id
+    count   = length(aws_nat_gateway.gateway)
+    vpc_id  = aws_vpc.vpc.id
 
-    route = [
+    route   = [
         {
         cidr_block                 = "0.0.0.0/0"
-        gateway_id                 = aws_nat_gateway.gateway.id
+        gateway_id                 = aws_nat_gateway.gateway[count.index].id
         carrier_gateway_id         = ""
         destination_prefix_list_id = ""
         egress_only_gateway_id     = ""
@@ -123,8 +127,8 @@ resource "aws_route_table" "nat_gateway" {
         }
     ]
 
-    tags = {
-        Name = "NAT Gateway"
+    tags    = {
+        Name = "NAT Gateway ${count.index}"
     }
 
     # bug: kept changing this resource for some reason
@@ -133,9 +137,9 @@ resource "aws_route_table" "nat_gateway" {
     }
 }
 
-# Associate the nat gateway route table with the private subnet
+# # Associate the nat gateway route table with the private subnet
 resource "aws_route_table_association" "subnet_private_nat_gateway" {
-    for_each = aws_subnet.private
-    subnet_id =  each.value.id
-    route_table_id = aws_route_table.nat_gateway.id
+    count           = length(local.private_subnet_ids)
+    subnet_id       = local.private_subnet_ids[count.index]
+    route_table_id  = aws_route_table.nat_gateway[count.index].id
 }

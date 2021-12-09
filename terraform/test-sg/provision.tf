@@ -1,12 +1,11 @@
-module vpc {
-    source              = "../vpc"
-    project_name        = "Test Security Group"
-    no_private_subnets  = 1
-}
-
 module myip {
   source  = "4ops/myip/http"
   version = "1.0.0"
+}
+
+module vpc {
+    source              = "../vpc"
+    project_name        = "Test Security Group"
 }
 
 module sg {
