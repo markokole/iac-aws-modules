@@ -27,7 +27,7 @@ AWS_DEFAULT_REGION=
 
 The repository's folder *terraform* will map to the Docker's volume called *local-git*. Change <CONTAINER_NAME> with meaningful name in the below command before executing it.
 
-Run the following command
+Run the following command to download the custom Terraform environment image:
 
 ```bash
 docker run -itd --name <CONTAINER_NAME> --env-file "aws/credentials" --volume $PWD/terraform:/local-git markokole/terraformer:1.0.3
