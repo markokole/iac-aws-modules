@@ -1,4 +1,3 @@
-# Create security group and open port 80 to the world and SSH to the local machine
 resource "aws_security_group" "sg" {
     name        = var.security_group_name
     vpc_id      = var.vpc_id

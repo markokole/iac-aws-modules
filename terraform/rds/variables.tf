@@ -1,3 +1,6 @@
+variable vpc_id {
+    type = string
+}
 variable project_name {
     type = string
 }
@@ -14,7 +17,6 @@ variable publicly_accessible {
     type = string
 }
 
-
 variable subnet_ids {
     type = list(string)
 }
@@ -23,14 +25,12 @@ variable security_groups {
     type = list(string)
 }
 
-variable security_group_rules {
-    description = "Security group rules added for RDS"
-    type = map
-    default = {
-        dummy = {
-            port = 80
-            cidr_blocks = ["127.0.0.0/32"]
-            description = "Dummy port"
-        }
-    }
+variable instance_class {
+    type    = string
+    default = "db.t3.micro"
+}
+
+variable database_name {
+    type    = string
+    default = "mydb"
 }

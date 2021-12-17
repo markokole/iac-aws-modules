@@ -27,4 +27,4 @@ override.tf.json
 
 **/.terraform.lock.hcl
 credentials
-my_ip.txt
+working-dir-tf
