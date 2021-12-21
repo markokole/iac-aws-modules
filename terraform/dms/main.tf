@@ -46,8 +46,8 @@ resource aws_dms_endpoint target {
     endpoint_id                 = "target-s3"
     engine_name                 = "s3"
     s3_settings {
-        bucket_name             = "dms-test-20211211"
-        data_format             = "csv"
+        bucket_name             = var.bucket_name
+        data_format             = var.s3_data_format
         service_access_role_arn = aws_iam_role.role.arn
     }
 

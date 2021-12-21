@@ -40,9 +40,14 @@ variable password {
     sensitive = true
 }
 variable bucket_name {
-    default = "dms-test-20211211"
+    type = string
 }
 
 variable permissions_boundary {
     type = string
+}
+
+variable s3_data_format {
+    type    = string
+    default = "csv"
 }
