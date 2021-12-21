@@ -32,6 +32,7 @@ resource aws_iam_role role {
 		},
 		]
 	})
+	permissions_boundary = var.permissions_boundary
 }
 
 resource aws_iam_policy_attachment attach {
@@ -58,6 +59,7 @@ data aws_iam_policy_document dms_assume_role {
 resource aws_iam_role dms-cloudwatch-logs-role {
   assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
   name               = "dms-cloudwatch-logs-role"
+  permissions_boundary = var.permissions_boundary
 }
 
 resource aws_iam_role_policy_attachment dms-cloudwatch-logs-role-AmazonDMSCloudWatchLogsRole {

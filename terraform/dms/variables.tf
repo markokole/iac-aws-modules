@@ -42,3 +42,7 @@ variable password {
 variable bucket_name {
     default = "dms-test-20211211"
 }
+
+variable permissions_boundary {
+    type = string
+}
