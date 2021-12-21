@@ -71,6 +71,6 @@ variable skip_final_snapshot {
 }
 
 variable tags {
-    type = object
+    type    = map(string)
     default = {}
 }
