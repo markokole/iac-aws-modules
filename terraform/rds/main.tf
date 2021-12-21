@@ -44,8 +44,5 @@ resource aws_db_instance instance {
     vpc_security_group_ids  = var.security_groups
     db_subnet_group_name    = aws_db_subnet_group.db_subnet.name
     storage_encrypted       = var.storage_encrypted
-
-    tags = {
-        tags = var.tags
-    }
+    tags                    = var.tags
 }
