@@ -27,11 +27,11 @@ resource aws_db_parameter_group parameters {
 }
 
 resource aws_db_instance instance {
-    allocated_storage       = 10
-    engine                  = "mysql"
-    engine_version          = "5.7"
-    backup_retention_period = 3
-    apply_immediately       = true
+    allocated_storage       = var.allocated_storage
+    engine                  = var.engine
+    engine_version          = var.engine_version
+    backup_retention_period = var.backup_retention_period
+    apply_immediately       = var.apply_immediately
     # auto_minor_version_upgrade = false #to-do: test DMS with these two as well!!!
     # monitoring_interval = 0
     instance_class          = var.instance_class
@@ -40,11 +40,12 @@ resource aws_db_instance instance {
     password                = var.password
     publicly_accessible     = var.publicly_accessible
     parameter_group_name    = aws_db_parameter_group.parameters.name
-    skip_final_snapshot     = true
+    skip_final_snapshot     = var.skip_final_snapshot
     vpc_security_group_ids  = var.security_groups
     db_subnet_group_name    = aws_db_subnet_group.db_subnet.name
+    storage_encrypted       = var.storage_encrypted
 
     tags = {
-        Name = var.project_name
+        tags = var.tags
     }
 }
