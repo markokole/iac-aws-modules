@@ -45,6 +45,11 @@ variable allocated_storage {
     default = 10
 }
 
+variable max_allocated_storage {
+    type    = number
+    default = 50
+}
+
 variable engine {
     type    = string
     default = "mysql"
@@ -73,4 +78,8 @@ variable skip_final_snapshot {
 variable tags {
     type    = map(string)
     default = {}
+}
+
+variable db_identifier {
+    type    = string
 }

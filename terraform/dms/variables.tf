@@ -44,10 +44,15 @@ variable bucket_name {
 }
 
 variable permissions_boundary {
-    type = string
+    type    = string
+    default = ""
 }
 
 variable s3_data_format {
     type    = string
     default = "csv"
+}
+
+variable replication_task_settings {
+    type    = string
 }
