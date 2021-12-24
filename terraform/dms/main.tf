@@ -65,8 +65,7 @@ resource aws_dms_replication_task task {
     table_mappings              = "{\"rules\":[{\"rule-type\":\"selection\",\"rule-id\":\"1\",\"rule-name\":\"1\",\"object-locator\":{\"schema-name\":\"${var.database_name}\",\"table-name\":\"%\"},\"rule-action\":\"include\"}]}"
     replication_task_settings   = file(var.replication_task_settings)
 
-    lifecycle {
-        ignore_changes = [replication_task_settings]
-    }
-
+    # lifecycle {
+    #     ignore_changes = [replication_task_settings]
+    # }
 }
