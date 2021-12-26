@@ -1,0 +1,12 @@
+{
+    "TargetMetadata": {
+        "BatchApplyEnabled": true
+    },
+    "ChangeProcessingTuning": {
+        "BatchApplyPreserveTransaction": false,
+        "BatchApplyTimeoutMax": 600,
+        "BatchApplyTimeoutMin": 600,
+        "MemoryKeepTime": 600
+      }
+
+}
