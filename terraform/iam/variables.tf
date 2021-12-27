@@ -15,7 +15,7 @@ variable policy_action {
 
 variable policy_resource {
     type    = list(string)
-    default = ""
+    default = []
 }
 
 variable user {
