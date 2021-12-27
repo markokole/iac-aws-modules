@@ -18,3 +18,11 @@ variable policy_resource {
 variable user {
     type = string
 }
+
+variable role_name {
+    type = string
+}
+
+variable principal_service {
+    type = string
+}
