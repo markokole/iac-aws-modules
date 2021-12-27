@@ -13,3 +13,7 @@ output engine {
 output port {
     value = aws_db_instance.instance.port
 }
+
+output identifier {
+    value = aws_db_instance.instance.identifier
+}

@@ -1,19 +1,20 @@
 resource aws_iam_policy policy {
-  name        = var.policy_name
-  path        = "/"
-  description = var.policy_description
+    
+    name        = var.policy_name
+    path        = "/"
+    description = var.policy_description
 
-  policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": var.policy_action,
-            "Resource": var.policy_resource
-        }
-    ]
-})
+    policy = jsonencode({
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "VisualEditor0",
+                "Effect": "Allow",
+                "Action": var.policy_action,
+                "Resource": var.policy_resource
+            }
+        ]
+    })
 }
 
 resource aws_iam_user_policy_attachment attach {
