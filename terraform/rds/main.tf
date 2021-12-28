@@ -27,7 +27,7 @@ resource aws_db_parameter_group parameters {
 }
 
 resource aws_db_instance instance {
-    # identifier              = var.db_identifier
+    identifier              = var.db_identifier
     allocated_storage       = var.allocated_storage
     max_allocated_storage   = var.max_allocated_storage
     engine                  = var.engine
