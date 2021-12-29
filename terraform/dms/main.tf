@@ -11,7 +11,7 @@ resource "aws_dms_replication_subnet_group" "subnet" {
 
 # Create a new replication instance
 resource "aws_dms_replication_instance" "instance" {
-		allocated_storage               = 20
+		allocated_storage               = var.allocated_storage
 		apply_immediately               = true
 		auto_minor_version_upgrade      = true
 		availability_zone               = var.availability_zone

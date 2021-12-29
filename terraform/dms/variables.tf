@@ -56,3 +56,8 @@ variable s3_data_format {
 variable replication_task_settings {
     type    = string
 }
+
+variable allocated_storage {
+    type    = number
+    default = 20
+}
