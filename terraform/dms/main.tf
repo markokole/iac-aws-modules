@@ -62,7 +62,7 @@ resource aws_dms_replication_task task {
     replication_task_id         = "replication-task-id"
     source_endpoint_arn         = aws_dms_endpoint.source.endpoint_arn
     target_endpoint_arn         = aws_dms_endpoint.target.endpoint_arn
-    table_mappings              = "{\"rules\":[{\"rule-type\":\"selection\",\"rule-id\":\"1\",\"rule-name\":\"1\",\"object-locator\":{\"schema-name\":\"${var.database_name}\",\"table-name\":\"%\"},\"rule-action\":\"include\"}]}"
+    table_mappings              = "{\"rules\":[{\"rule-type\":\"selection\",\"rule-id\":\"1\",\"rule-name\":\"1\",\"object-locator\":{\"schema-name\":\"${var.source_database_name}\",\"table-name\":\"%\"},\"rule-action\":\"include\"}]}"
     replication_task_settings   = file(var.replication_task_settings)
 
     # lifecycle {
