@@ -39,18 +39,10 @@ variable username {
 variable password {
     sensitive = true
 }
-variable bucket_name {
-    type = string
-}
 
 variable permissions_boundary {
     type    = string
     default = ""
-}
-
-variable s3_data_format {
-    type    = string
-    default = "csv"
 }
 
 variable replication_task_settings {
@@ -70,6 +62,11 @@ variable target_endpoint_id {
     type    = string
 }
 
-variable target_s3_settings {
+variable target_bucket_name {
+    type = string
+}
+
+variable target_s3_data_format {
     type    = string
+    default = "csv"
 }

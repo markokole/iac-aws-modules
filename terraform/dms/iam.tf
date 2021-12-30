@@ -10,7 +10,7 @@ resource aws_iam_policy policy {
 				"Sid": "VisualEditor0",
 				"Effect": "Allow",
 				"Action": "s3:*",
-				"Resource": ["arn:aws:s3:::${var.bucket_name}", "arn:aws:s3:::${var.bucket_name}/*"]
+				"Resource": ["arn:aws:s3:::${var.target_bucket_name}", "arn:aws:s3:::${var.target_bucket_name}/*"]
 			}
 		]
 	})

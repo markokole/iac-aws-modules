@@ -45,14 +45,12 @@ resource aws_dms_endpoint target_s3 {
     endpoint_id     = var.target_endpoint_id
     engine_name     = "s3"
     endpoint_type   = "target"
-    # endpoint_id                 = "target-s3"
-    s3_settings     = file(var.target_s3_settings)
-    # s3_settings {
-    #     bucket_name             = var.bucket_name
-    #     data_format             = var.s3_data_format
-    #     service_access_role_arn = aws_iam_role.role.arn
-    # }
+    s3_settings {
+        bucket_name             = var.target_bucket_name
+        data_format             = var.target_s3_data_format
+        service_access_role_arn = aws_iam_role.role.arn
 
+    }
     depends_on = [
         aws_iam_role.role
     ]
