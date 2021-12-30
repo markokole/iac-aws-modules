@@ -41,7 +41,7 @@ resource aws_dms_endpoint source {
     password         = var.password 
 }
 
-resource aws_dms_endpoint target_s3 {
+resource aws_dms_endpoint target {
     endpoint_id     = var.target_endpoint_id
     engine_name     = "s3"
     endpoint_type   = "target"
@@ -61,7 +61,7 @@ resource aws_dms_replication_task task {
     replication_instance_arn    = aws_dms_replication_instance.instance.replication_instance_arn
     replication_task_id         = "replication-task-id"
     source_endpoint_arn         = aws_dms_endpoint.source.endpoint_arn
-    target_endpoint_arn         = aws_dms_endpoint.target_s3.endpoint_arn
+    target_endpoint_arn         = aws_dms_endpoint.target.endpoint_arn
     table_mappings              = "{\"rules\":[{\"rule-type\":\"selection\",\"rule-id\":\"1\",\"rule-name\":\"1\",\"object-locator\":{\"schema-name\":\"${var.database_name}\",\"table-name\":\"%\"},\"rule-action\":\"include\"}]}"
     replication_task_settings   = file(var.replication_task_settings)
 
