@@ -31,25 +31,27 @@ resource "aws_dms_replication_instance" "instance" {
 }
 
 resource aws_dms_endpoint source {
-    server_name                 = var.server_name
-    endpoint_id                 = var.endpoint_id
-    endpoint_type               = var.endpoint_type
-    engine_name                 = var.engine_name
-    database_name               = var.database_name
-    port                        = var.port
-    username                    = var.username
-    password                    = var.password 
+    server_name      = var.server_name
+    endpoint_id      = var.endpoint_id
+    endpoint_type    = var.endpoint_type
+    engine_name      = var.engine_name
+    database_name    = var.database_name
+    port             = var.port
+    username         = var.username
+    password         = var.password 
 }
 
-resource aws_dms_endpoint target {
-    endpoint_type               = "target"
-    endpoint_id                 = "target-s3"
-    engine_name                 = "s3"
-    s3_settings {
-        bucket_name             = var.bucket_name
-        data_format             = var.s3_data_format
-        service_access_role_arn = aws_iam_role.role.arn
-    }
+resource aws_dms_endpoint target_s3 {
+    endpoint_id     = var.target_endpoint_id
+    engine_name     = "s3"
+    endpoint_type   = "target"
+    # endpoint_id                 = "target-s3"
+    s3_settings     = file(var.target_s3_settings)
+    # s3_settings {
+    #     bucket_name             = var.bucket_name
+    #     data_format             = var.s3_data_format
+    #     service_access_role_arn = aws_iam_role.role.arn
+    # }
 
     depends_on = [
         aws_iam_role.role
@@ -61,7 +63,7 @@ resource aws_dms_replication_task task {
     replication_instance_arn    = aws_dms_replication_instance.instance.replication_instance_arn
     replication_task_id         = "replication-task-id"
     source_endpoint_arn         = aws_dms_endpoint.source.endpoint_arn
-    target_endpoint_arn         = aws_dms_endpoint.target.endpoint_arn
+    target_endpoint_arn         = aws_dms_endpoint.target_s3.endpoint_arn
     table_mappings              = "{\"rules\":[{\"rule-type\":\"selection\",\"rule-id\":\"1\",\"rule-name\":\"1\",\"object-locator\":{\"schema-name\":\"${var.database_name}\",\"table-name\":\"%\"},\"rule-action\":\"include\"}]}"
     replication_task_settings   = file(var.replication_task_settings)
 

@@ -61,3 +61,15 @@ variable allocated_storage {
     type    = number
     default = 20
 }
+
+#########
+# target
+#########
+
+variable target_endpoint_id {
+    type    = string
+}
+
+variable target_s3_settings {
+    type    = string
+}
