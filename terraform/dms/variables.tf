@@ -73,5 +73,5 @@ variable target_s3_data_format {
 
 variable target_s3_date_partition_enabled {
     type    = string
-    default = False
+    default = "false"
 }

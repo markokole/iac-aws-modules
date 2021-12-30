@@ -50,7 +50,6 @@ resource aws_dms_endpoint target {
         data_format             = var.target_s3_data_format
         service_access_role_arn = aws_iam_role.role.arn
         date_partition_enabled  = var.target_s3_date_partition_enabled
-
     }
     depends_on = [
         aws_iam_role.role
