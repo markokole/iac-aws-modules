@@ -31,14 +31,14 @@ resource "aws_dms_replication_instance" "instance" {
 }
 
 resource aws_dms_endpoint source {
-    server_name      = var.server_name
-    endpoint_id      = var.endpoint_id
-    endpoint_type    = var.endpoint_type
-    engine_name      = var.engine_name
-    database_name    = var.database_name
-    port             = var.port
-    username         = var.username
-    password         = var.password 
+    server_name      = var.source_server_name
+    endpoint_id      = var.source_endpoint_id
+    endpoint_type    = "source"
+    engine_name      = var.source_engine_name
+    database_name    = var.source_database_name
+    port             = var.source_port
+    username         = var.source_username
+    password         = var.source_password 
 }
 
 resource aws_dms_endpoint target {

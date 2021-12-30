@@ -26,17 +26,16 @@ variable replication_instance_class {
     description = "Can be one of dms.t2.micro, dms.t2.small, dms.t2.medium, dms.t2.large, dms.c4.large, dms.c4.xlarge, dms.c4.2xlarge, dms.c4.4xlarge"
 }
 
-variable server_name {}
-variable database_name {}
-variable port {}
-variable endpoint_id {}
-variable endpoint_type {}
-variable engine_name {}
+variable source_server_name {}
+variable source_database_name {}
+variable source_port {}
+variable source_endpoint_id {}
+variable source_engine_name {}
 variable migration_type {}
-variable username {
+variable source_username {
     sensitive = true
 }
-variable password {
+variable source_password {
     sensitive = true
 }
 
