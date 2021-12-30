@@ -70,3 +70,8 @@ variable target_s3_data_format {
     type    = string
     default = "csv"
 }
+
+variable target_s3_date_partition_enabled {
+    type    = string
+    default = False
+}
